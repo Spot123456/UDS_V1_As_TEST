@@ -140,18 +140,19 @@ void UDS_Write_Data_Server(uint8* received_data, uint16 received_length)
 /******************************************************************************/
 
 
-
+typedef unsigned short int		uint16_t;
 
 /*************************************************************/
-/*
+
 void UDS_Read_Data_Server( uint8 Data[])
 {
 	uint8 Send_counter_Temp;
 	if (Data[1] == Read_Service)
 	{
-
+	 
+		uint32 read = Data[2] << 8 | Data[3];
 		// void read_DID (DID)
-		switch (Data[2])
+		switch ( read)
 		{
 
 		case Oil_Temp:
@@ -173,17 +174,24 @@ void UDS_Read_Data_Server( uint8 Data[])
 			Data[5] = oil_temp_var >> 16;
 			Data[6] = oil_temp_var >> 8;
 			Data[7] = (uint8)oil_temp_var;
+			
 			break;
+
+		
+			
 
 			//send +ive resp with data
 		}
 
 	}
 			
-
+	for (int i = 0; i < 8; i++)
+	{
+		printf("%d \n", Data[i]);
+	}
 
 }
-*/
+
 /**************************************************************/
 
 
@@ -390,14 +398,16 @@ void send_ses_ext()
 
 int main()
 {
-	server_call_back();
+	//server_call_back();
+	uint8 data_read[8] = {4, Read_Service , 0xF5 , 0x3D };
+	UDS_Read_Data_Server(data_read);
 	//printf("hamada");
-	printf("the data befor write oil_temp_var %d\n", oil_temp_var);
-	printf("the data befor write oil_pressure_var %d\n", oil_pressure_var);
-	uint8 data[] = { 7,Write_Service ,0xF5,0x3D, 0x0,0x1 ,0,0 };
+	//printf("the data befor write oil_temp_var %d\n", oil_temp_var);
+	//printf("the data befor write oil_pressure_var %d\n", oil_pressure_var);
+	//uint8 data[] = { 7,Write_Service ,0xF5,0x3D, 0x0,0x1 ,0,0 };
 	//UDS_Write_Data_Server(data, 7);
-	printf("the data after write oil_temp_var %d\n", oil_temp_var);
-	printf("the data after write  oil_pressure_var %d\n", oil_pressure_var);
+	//printf("the data after write oil_temp_var %d\n", oil_temp_var);
+	//printf("the data after write  oil_pressure_var %d\n", oil_pressure_var);
 	return 0;
 }
 
